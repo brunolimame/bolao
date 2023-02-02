@@ -1,7 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"bolao/configs"
+	"fmt"
+)
 
 func main() {
-	fmt.Println("Sistema rodando")
+	configs := configs.NewConfig()
+	fmt.Println(configs.GetDBDriver())
 }
