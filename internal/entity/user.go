@@ -11,6 +11,8 @@ type User struct {
 	Nome     string    `json:"nome"`
 	Email    string    `json:"email"`
 	Password string    `json:"-"`
+	Criado   string    `json:"criado"`
+	Alterado string    `json:"alterado"`
 }
 
 func NewUser(nome, email, password string) (*User, error) {
