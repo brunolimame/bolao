@@ -5,73 +5,39 @@ import (
 	"github.com/spf13/viper"
 )
 
-var cfg *conf
-
-func NewConfig() *conf {
-	return cfg
-}
-
 type conf struct {
-	dbDriver      string
-	dbHost        string
-	dbPort        string
-	dbUser        string
-	dbPassword    string
-	dbName        string
-	webServerPort int
-	jWTSecret     string
-	jWTExpiresIn  int
-	tokenAuth     *jwtauth.JWTAuth
+	DBDriver      string `mapstructure:"DB_DRIVER"`
+	DBHost        string `mapstructure:"DB_HOST"`
+	DBPort        int    `mapstructure:"DB_PORT"`
+	DBUser        string `mapstructure:"DB_USER"`
+	DBPassword    string `mapstructure:"DB_PASSWORD"`
+	DBName        string `mapstructure:"DB_NAME"`
+	WebServerPort int    `mapstructure:"WEB_SERVER_PORT"`
+	JWTSecret     string `mapstructure:"JWT_SECRET"`
+	JWTExpiresIn  int    `mapstructure:"JET_EXPIRES_IN"`
+	TokenAuth     *jwtauth.JWTAuth
 }
 
-func init() {
+func LoadConfig(path string) (*conf, error) {
+	var cfg *conf
 	viper.SetConfigName("app_config")
 	viper.SetConfigType("env")
-	viper.AddConfigPath(".")
-	viper.AllowEmptyEnv(true)
+	viper.AddConfigPath(path)
 	viper.SetConfigFile(".env")
+	viper.AutomaticEnv()
+
 	err := viper.ReadInConfig()
 	if err != nil {
-		panic(err)
+		return cfg, err
 	}
 
-	cfg.dbDriver = viper.GetString("DB_DRIVER")
-	cfg.dbHost = viper.GetString("DB_HOST")
-	cfg.dbPort = viper.GetString("DB_PORT")
-	cfg.dbUser = viper.GetString("DB_USER")
-	cfg.dbPassword = viper.GetString("DB_PASSWORD")
-	cfg.dbName = viper.GetString("DB_NAME")
-	cfg.webServerPort = viper.GetInt("WEB_SERVER_PORT")
-	cfg.jWTSecret = viper.GetString("JWT_SECRET")
-	cfg.jWTExpiresIn = viper.GetInt("JET_EXPIRES_IN")
-	cfg.tokenAuth = jwtauth.New("HS256", []byte(cfg.jWTSecret), nil)
+	err = viper.Unmarshal(&cfg)
 
-}
+	if err != nil {
+		return cfg, err
+	}
 
-func (c *conf) GetDBDriver() string {
-	return c.dbDriver
-}
-func (c *conf) GetDBHost() string {
-	return c.dbHost
-}
-func (c *conf) GetDBPort() string {
-	return c.dbPort
-}
-func (c *conf) GetDBUser() string {
-	return c.dbUser
-}
-func (c *conf) GetDBPassword() string {
-	return c.dbPassword
-}
-func (c *conf) GetDBName() string {
-	return c.dbName
-}
-func (c *conf) GetWebServerPort() int {
-	return c.webServerPort
-}
-func (c *conf) GetJwtSecret() string {
-	return c.jWTSecret
-}
-func (c *conf) GetJwtExpiresIn() int {
-	return c.jWTExpiresIn
+	cfg.TokenAuth = jwtauth.New("HS256", []byte(cfg.JWTSecret), nil)
+
+	return cfg, nil
 }

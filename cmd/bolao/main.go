@@ -6,6 +6,9 @@ import (
 )
 
 func main() {
-	configs := configs.NewConfig()
-	fmt.Println(configs.GetDBDriver())
+	config, err := configs.LoadConfig(".")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(config.DBDriver)
 }
