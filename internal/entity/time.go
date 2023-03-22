@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-type Time struct {
+type TimeEntity struct {
 	ID       entity.ID `json:"id"`
 	Nome     string    `json:"nome"`
 	Escudo   string    `json:"escudo"`
@@ -14,8 +14,8 @@ type Time struct {
 	Status   bool      `json:"status"`
 }
 
-func NewTime(nome string, escudo string) (*Time, error) {
-	time := &Time{
+func NewTime(nome string, escudo string) (*TimeEntity, error) {
+	time := &TimeEntity{
 		ID:       entity.NewID(),
 		Nome:     nome,
 		Escudo:   escudo,
@@ -25,4 +25,12 @@ func NewTime(nome string, escudo string) (*Time, error) {
 	}
 
 	return time, nil
+}
+
+func (t *TimeEntity) Enable() {
+	t.Status = true
+}
+
+func (t *TimeEntity) Disable() {
+	t.Status = false
 }

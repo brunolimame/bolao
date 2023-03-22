@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-type Rodada struct {
+type RodadaEntity struct {
 	ID       entity.ID `json:"id"`
 	Nome     string    `json:"nome"`
 	Peso     int       `json:"peso"`
@@ -14,8 +14,8 @@ type Rodada struct {
 	Status   bool      `json:"status"`
 }
 
-func NewRodada(nome string, peso int) (*Rodada, error) {
-	rodada := &Rodada{
+func NewRodada(nome string, peso int) (*RodadaEntity, error) {
+	rodada := &RodadaEntity{
 		ID:       entity.NewID(),
 		Nome:     nome,
 		Peso:     peso,
@@ -25,4 +25,12 @@ func NewRodada(nome string, peso int) (*Rodada, error) {
 	}
 
 	return rodada, nil
+}
+
+func (r *RodadaEntity) Enable() {
+	r.Status = true
+}
+
+func (r *RodadaEntity) Disable() {
+	r.Status = false
 }
