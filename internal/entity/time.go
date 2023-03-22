@@ -2,8 +2,11 @@ package entity
 
 import (
 	"bolao/pkg/entity"
+	"errors"
 	"time"
 )
+
+const MSG_ERROR_NOME_TIME_REQUERIDO = "Nome do time não definido"
 
 type TimeEntity struct {
 	ID       entity.ID `json:"id"`
@@ -24,7 +27,19 @@ func NewTime(nome string, escudo string) (*TimeEntity, error) {
 		Status:   true,
 	}
 
+	err := time.Validate()
+	if err != nil {
+		return nil, err
+	}
+
 	return time, nil
+}
+
+func (r *TimeEntity) Validate() error {
+	if len(r.Nome) <= 0 {
+		return errors.New(MSG_ERROR_NOME_TIME_REQUERIDO)
+	}
+	return nil
 }
 
 func (t *TimeEntity) Enable() {

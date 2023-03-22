@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+const MSG_ERROR_NOME_CAMPEONATO_REQUERIDO = "Nome do campeonato não definido"
+
 type CampeonatoEntity struct {
 	ID       entity.ID      `json:"id"`
 	Nome     string         `json:"nome"`
@@ -35,7 +37,7 @@ func NewCampeonato(nome string) (*CampeonatoEntity, error) {
 
 func (c *CampeonatoEntity) Validate() error {
 	if len(c.Nome) <= 0 {
-		return errors.New("Nome do campeonato é obrigatório")
+		return errors.New(MSG_ERROR_NOME_CAMPEONATO_REQUERIDO)
 	}
 	return nil
 }

@@ -8,7 +8,7 @@ import (
 
 func TestRodada(t *testing.T) {
 
-	t.Run("Nova Rodada", func(t *testing.T) {
+	t.Run("Criando nova Rodada", func(t *testing.T) {
 		rodada, err := NewRodada("Rodada 01", 10)
 		assert.Nil(t, err)
 		assert.NotNil(t, rodada)
@@ -30,6 +30,20 @@ func TestRodada(t *testing.T) {
 
 		rodada.Enable()
 		assert.Equal(t, true, rodada.Status)
+	})
+
+	t.Run("Criando uma rodada com nome em branco", func(t *testing.T) {
+		rodada, err := NewRodada("", 10)
+		assert.Nil(t, rodada)
+		assert.NotNil(t, err)
+		assert.EqualError(t, err, MSG_ERROR_NOME_RODADA_REQUERIDO)
+	})
+
+	t.Run("Criando uma rodada com peso abaixo do minimo", func(t *testing.T) {
+		rodada, err := NewRodada("Rodada 1", 8)
+		assert.Nil(t, rodada)
+		assert.NotNil(t, err)
+		assert.EqualError(t, err, MSG_ERROR_PESO_RODADA_REQUERIDO)
 	})
 
 }

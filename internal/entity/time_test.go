@@ -8,7 +8,7 @@ import (
 
 func TestTime(t *testing.T) {
 
-	t.Run("Novo time", func(t *testing.T) {
+	t.Run("Criando novo time", func(t *testing.T) {
 		time, err := NewTime("Brasil", "escudo.jpg")
 		assert.Nil(t, err)
 		assert.NotNil(t, time)
@@ -30,5 +30,12 @@ func TestTime(t *testing.T) {
 
 		time.Enable()
 		assert.Equal(t, true, time.Status)
+	})
+
+	t.Run("Criando um time com nome em branco", func(t *testing.T) {
+		time, err := NewTime("", "")
+		assert.Nil(t, time)
+		assert.NotNil(t, err)
+		assert.EqualError(t, err, MSG_ERROR_NOME_TIME_REQUERIDO)
 	})
 }
