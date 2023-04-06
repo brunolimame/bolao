@@ -31,4 +31,25 @@ func TestUser(t *testing.T) {
 		assert.False(t, user.ValidPassword("1234567"))
 		assert.True(t, user.ValidPassword("123456"))
 	})
+
+	t.Run("Criando usuário com nome em branco", func(t *testing.T) {
+		user, err := NewUser("", "brunolimame@gmail.com", "123456")
+		assert.Nil(t, user)
+		assert.NotNil(t, err)
+		assert.EqualError(t, err, UserEntityMsgErrorNomeRequerido)
+	})
+
+	t.Run("Criando usuário com e-mail em branco", func(t *testing.T) {
+		user, err := NewUser("Bruno", "", "123456")
+		assert.Nil(t, user)
+		assert.NotNil(t, err)
+		assert.EqualError(t, err, UserEntityMsgErrorEmailRequerido)
+	})
+
+	t.Run("Criando usuário com senha em branco", func(t *testing.T) {
+		user, err := NewUser("Bruno", "brunolimame@gmail.com", "")
+		assert.Nil(t, user)
+		assert.NotNil(t, err)
+		assert.EqualError(t, err, UserEntityMsgErrorPasswordRequerido)
+	})
 }

@@ -3,13 +3,17 @@ package entity
 import (
 	"bolao/pkg/entity"
 	"crypto/rand"
+	"errors"
 	"fmt"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
-const c_DEFAULT_COST_PASSWORD = bcrypt.DefaultCost
+const userEntityDefaultCostPassword = bcrypt.DefaultCost
+const UserEntityMsgErrorNomeRequerido = "Nome do usuário não definido"
+const UserEntityMsgErrorEmailRequerido = "E-mail não definido"
+const UserEntityMsgErrorPasswordRequerido = "Senha não definida"
 
 type UserEntity struct {
 	ID       entity.ID `json:"id"`
@@ -40,6 +44,12 @@ func NewUser(nome, email, password string) (*UserEntity, error) {
 		Status:   true,
 	}
 
+	err = newUser.Validate()
+
+	if err != nil {
+		return nil, err
+	}
+
 	passwordCrypt, err := newUser.EncryptPassword(newUser.Password + newUser.Salt)
 
 	if err != nil {
@@ -50,8 +60,21 @@ func NewUser(nome, email, password string) (*UserEntity, error) {
 	return newUser, nil
 }
 
+func (u *UserEntity) Validate() error {
+	if len(u.Nome) <= 0 {
+		return errors.New(UserEntityMsgErrorNomeRequerido)
+	}
+	if len(u.Email) <= 0 {
+		return errors.New(UserEntityMsgErrorEmailRequerido)
+	}
+	if len(u.Password) <= 0 {
+		return errors.New(UserEntityMsgErrorPasswordRequerido)
+	}
+	return nil
+}
+
 func genSalt() (string, error) {
-	salt := make([]byte, c_DEFAULT_COST_PASSWORD)
+	salt := make([]byte, userEntityDefaultCostPassword)
 	_, err := rand.Read(salt)
 	if err != nil {
 		return "", err
@@ -60,7 +83,7 @@ func genSalt() (string, error) {
 }
 
 func (u *UserEntity) EncryptPassword(password string) (string, error) {
-	hash, err := bcrypt.GenerateFromPassword([]byte(password), c_DEFAULT_COST_PASSWORD)
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), userEntityDefaultCostPassword)
 	if err != nil {
 		return "", err
 	}
