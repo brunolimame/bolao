@@ -11,7 +11,7 @@ const CampeonatoEntityMsgErrorNomeRequerido = "Nome do campeonato não definido"
 type CampeonatoEntity struct {
 	ID       entity.ID      `json:"id"`
 	Nome     string         `json:"nome"`
-	Rodada   []RodadaEntity `json:"rodadas"`
+	Rodadas  []RodadaEntity `json:"rodadas"`
 	Criado   time.Time      `json:"criado"`
 	Alterado time.Time      `json:"alterado"`
 	Status   bool           `json:"status"`
@@ -21,7 +21,7 @@ func NewCampeonato(nome string) (*CampeonatoEntity, error) {
 	campeonato := &CampeonatoEntity{
 		ID:       entity.NewID(),
 		Nome:     nome,
-		Rodada:   []RodadaEntity{},
+		Rodadas:  []RodadaEntity{},
 		Criado:   time.Now(),
 		Alterado: time.Time{},
 		Status:   true,
@@ -43,7 +43,7 @@ func (c *CampeonatoEntity) Validate() error {
 }
 
 func (c *CampeonatoEntity) AddRodada(rodada *RodadaEntity) {
-	c.Rodada = append(c.Rodada, *rodada)
+	c.Rodadas = append(c.Rodadas, *rodada)
 }
 
 func (c *CampeonatoEntity) Enable() {

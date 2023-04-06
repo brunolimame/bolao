@@ -37,7 +37,7 @@ func TestCampeonato(t *testing.T) {
 		rodada2, _ := NewRodada("Rodada 02", 10)
 		campeonato.AddRodada(rodada1)
 		campeonato.AddRodada(rodada2)
-		assert.Equal(t, 2, len(campeonato.Rodada))
+		assert.Equal(t, 2, len(campeonato.Rodadas))
 	})
 
 	t.Run("Criando campeonato com nome em branco", func(t *testing.T) {
