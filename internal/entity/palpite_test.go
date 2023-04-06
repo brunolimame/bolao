@@ -39,14 +39,14 @@ func TestPalpite(t *testing.T) {
 		palpite, err := NewPalpite("p1", "", 1, 0)
 		assert.Nil(t, palpite)
 		assert.NotNil(t, err)
-		assert.EqualError(t, err, MSG_ERROR_PALPITE_JOGO_REQUERIDO)
+		assert.EqualError(t, err, PalpiteEntityMsgErrorIdJogoRequerido)
 	})
 
 	t.Run("Criando palpite sem o player", func(t *testing.T) {
 		palpite, err := NewPalpite("", "j1", 1, 0)
 		assert.Nil(t, palpite)
 		assert.NotNil(t, err)
-		assert.EqualError(t, err, MSG_ERROR_PALPITE_PLAYER_REQUERIDO)
+		assert.EqualError(t, err, PalpiteEntityMsgErrorPlayerRequerido)
 	})
 
 }

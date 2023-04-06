@@ -10,10 +10,12 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-const userEntityDefaultCostPassword = bcrypt.DefaultCost
-const UserEntityMsgErrorNomeRequerido = "Nome do usuário não definido"
-const UserEntityMsgErrorEmailRequerido = "E-mail não definido"
-const UserEntityMsgErrorPasswordRequerido = "Senha não definida"
+const (
+	userEntityDefaultCostPassword       = bcrypt.DefaultCost
+	UserEntityMsgErrorNomeRequerido     = "Nome do usuário não definido"
+	UserEntityMsgErrorEmailRequerido    = "E-mail não definido"
+	UserEntityMsgErrorPasswordRequerido = "Senha não definida"
+)
 
 type UserEntity struct {
 	ID       entity.ID `json:"id"`
@@ -94,4 +96,12 @@ func (u *UserEntity) ValidPassword(password string) bool {
 	testPassword := password + u.Salt
 	err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(testPassword))
 	return err == nil
+}
+
+func (u *UserEntity) Enable() {
+	u.Status = true
+}
+
+func (u *UserEntity) Disable() {
+	u.Status = false
 }

@@ -6,8 +6,10 @@ import (
 	"time"
 )
 
-const MSG_ERROR_PALPITE_JOGO_REQUERIDO = "ID do jogo é requerido"
-const MSG_ERROR_PALPITE_PLAYER_REQUERIDO = "ID do Player é requerido"
+const (
+	PalpiteEntityMsgErrorIdJogoRequerido = "ID do jogo é requerido"
+	PalpiteEntityMsgErrorPlayerRequerido = "ID do Player é requerido"
+)
 
 type PalpiteEntity struct {
 	ID       entity.ID `json:"id"`
@@ -42,10 +44,10 @@ func NewPalpite(playerId string, jogoId string, placarA int, placarB int) (*Palp
 
 func (p *PalpiteEntity) Validate() error {
 	if len(p.JogoID) <= 0 {
-		return errors.New(MSG_ERROR_PALPITE_JOGO_REQUERIDO)
+		return errors.New(PalpiteEntityMsgErrorIdJogoRequerido)
 	}
 	if len(p.PlayerID) <= 0 {
-		return errors.New(MSG_ERROR_PALPITE_PLAYER_REQUERIDO)
+		return errors.New(PalpiteEntityMsgErrorPlayerRequerido)
 	}
 	return nil
 }

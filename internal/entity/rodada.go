@@ -7,10 +7,10 @@ import (
 )
 
 const (
-	PESO_MINIMO_RODADA              int    = 10
-	PESO_INCREMENTADO_NA_RODADA     int    = 1
-	MSG_ERROR_NOME_RODADA_REQUERIDO string = "Nome da rodada não definido"
-	MSG_ERROR_PESO_RODADA_REQUERIDO string = "O peso não pode ser menor que 10"
+	RodadaEntityPesoMinimoRodada            int    = 10
+	RodadaEntitypesoIncrementadoNaRodada    int    = 1
+	RodadaEntityMsgErrorNomeRodadaRequerido string = "Nome da rodada não definido"
+	RodadaEntityMsgErrorPesoRodadaRequerido string = "O peso não pode ser menor que 10"
 )
 
 type RodadaEntity struct {
@@ -42,10 +42,10 @@ func NewRodada(nome string, peso int) (*RodadaEntity, error) {
 
 func (r *RodadaEntity) Validate() error {
 	if len(r.Nome) <= 0 {
-		return errors.New(MSG_ERROR_NOME_RODADA_REQUERIDO)
+		return errors.New(RodadaEntityMsgErrorNomeRodadaRequerido)
 	}
-	if r.Peso < PESO_MINIMO_RODADA {
-		return errors.New(MSG_ERROR_PESO_RODADA_REQUERIDO)
+	if r.Peso < RodadaEntityPesoMinimoRodada {
+		return errors.New(RodadaEntityMsgErrorPesoRodadaRequerido)
 	}
 	return nil
 }

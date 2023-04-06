@@ -44,6 +44,6 @@ func TestCampeonato(t *testing.T) {
 		campeonato, err := NewCampeonato("")
 		assert.Nil(t, campeonato)
 		assert.NotNil(t, err)
-		assert.EqualError(t, err, MSG_ERROR_NOME_CAMPEONATO_REQUERIDO)
+		assert.EqualError(t, err, CampeonatoEntityMsgErrorNomeRequerido)
 	})
 }

@@ -25,6 +25,18 @@ func TestUser(t *testing.T) {
 		assert.Equal(t, true, user.Status)
 	})
 
+	t.Run("Alterando status", func(t *testing.T) {
+		user, err := NewUser("Bruno", "brunolimame@gmail.com", "123456")
+		assert.Nil(t, err)
+		assert.NotNil(t, user)
+
+		user.Disable()
+		assert.Equal(t, false, user.Status)
+
+		user.Enable()
+		assert.Equal(t, true, user.Status)
+	})
+
 	t.Run("Validar Password", func(t *testing.T) {
 		user, err := NewUser("Bruno", "brunolimame@gmail.com", "123456")
 		assert.Nil(t, err)

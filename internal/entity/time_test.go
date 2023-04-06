@@ -32,10 +32,10 @@ func TestTime(t *testing.T) {
 		assert.Equal(t, true, time.Status)
 	})
 
-	t.Run("Criando um time com nome em branco", func(t *testing.T) {
+	t.Run("Criando time com nome em branco", func(t *testing.T) {
 		time, err := NewTime("", "")
 		assert.Nil(t, time)
 		assert.NotNil(t, err)
-		assert.EqualError(t, err, MSG_ERROR_NOME_TIME_REQUERIDO)
+		assert.EqualError(t, err, TimeEntityMsgErrorNomeTimeRequerido)
 	})
 }

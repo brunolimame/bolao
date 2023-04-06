@@ -40,20 +40,20 @@ func TestJogo(t *testing.T) {
 		jogo, err := NewJogo("", "", "", time.Now(), "Campo")
 		assert.Nil(t, jogo)
 		assert.NotNil(t, err)
-		assert.EqualError(t, err, MSG_ERROR_JOGO_RODADA_ID_REQUERIDA)
+		assert.EqualError(t, err, JogoEntityMsgErrorRodadaIdRequerida)
 	})
 
 	t.Run("Criando jogo sem o time A", func(t *testing.T) {
 		jogo, err := NewJogo("r1", "", "t2", time.Now(), "Campo")
 		assert.Nil(t, jogo)
 		assert.NotNil(t, err)
-		assert.EqualError(t, err, MSG_ERROR_JOGO_TIMEA_REQUERIDO)
+		assert.EqualError(t, err, JogoEntityMsgErrorTimeARequerido)
 	})
 
 	t.Run("Criando jogo sem o time B", func(t *testing.T) {
 		jogo, err := NewJogo("r1", "t1", "", time.Now(), "Campo")
 		assert.Nil(t, jogo)
 		assert.NotNil(t, err)
-		assert.EqualError(t, err, MSG_ERROR_JOGO_TIMEB_REQUERIDO)
+		assert.EqualError(t, err, JogoEntityMsgErrorTimeBRequerido)
 	})
 }

@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-const MSG_ERROR_NOME_TIME_REQUERIDO = "Nome do time não definido"
+const TimeEntityMsgErrorNomeTimeRequerido = "Nome do time não definido"
 
 type TimeEntity struct {
 	ID       entity.ID `json:"id"`
@@ -37,7 +37,7 @@ func NewTime(nome string, escudo string) (*TimeEntity, error) {
 
 func (r *TimeEntity) Validate() error {
 	if len(r.Nome) <= 0 {
-		return errors.New(MSG_ERROR_NOME_TIME_REQUERIDO)
+		return errors.New(TimeEntityMsgErrorNomeTimeRequerido)
 	}
 	return nil
 }

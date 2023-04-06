@@ -6,9 +6,11 @@ import (
 	"time"
 )
 
-const MSG_ERROR_JOGO_RODADA_ID_REQUERIDA = "ID da Rodada requerida"
-const MSG_ERROR_JOGO_TIMEA_REQUERIDO = "Time A requerido"
-const MSG_ERROR_JOGO_TIMEB_REQUERIDO = "Time B requerido"
+const (
+	JogoEntityMsgErrorRodadaIdRequerida = "ID da Rodada requerida"
+	JogoEntityMsgErrorTimeARequerido    = "Time A requerido"
+	JogoEntityMsgErrorTimeBRequerido    = "Time B requerido"
+)
 
 type JogoEntity struct {
 	ID       entity.ID `json:"id"`
@@ -45,13 +47,13 @@ func NewJogo(rodadaId string, timeAId string, timeBId string, dia time.Time, loc
 
 func (j *JogoEntity) Validate() error {
 	if len(j.RodadaID) <= 0 {
-		return errors.New(MSG_ERROR_JOGO_RODADA_ID_REQUERIDA)
+		return errors.New(JogoEntityMsgErrorRodadaIdRequerida)
 	}
 	if len(j.TimeAID) <= 0 {
-		return errors.New(MSG_ERROR_JOGO_TIMEA_REQUERIDO)
+		return errors.New(JogoEntityMsgErrorTimeARequerido)
 	}
 	if len(j.TimeBID) <= 0 {
-		return errors.New(MSG_ERROR_JOGO_TIMEB_REQUERIDO)
+		return errors.New(JogoEntityMsgErrorTimeBRequerido)
 	}
 	return nil
 }
