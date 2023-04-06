@@ -10,29 +10,32 @@ const (
 	RodadaEntityPesoMinimoRodada               int    = 10
 	RodadaEntitypesoIncrementadoNaRodada       int    = 1
 	RodadaEntityMsgErrorNomeRodadaRequerido    string = "Nome da rodada não definido"
+	RodadaEntityMsgErrorCampeonatoIdRequerido  string = "ID do campeonato não definido"
 	RodadaEntityMsgErrorPesoRodadaRequerido    string = "O peso não pode ser menor que 10"
-	RodadaEntityMsgErrorJogoNaoPercenteARodada string = "Este jogo não pertece a esta rodada"
+	RodadaEntityMsgErrorJogoNaoPercenteARodada string = "O jogo não pertece a esta rodada"
 )
 
 type RodadaEntity struct {
-	ID       entity.ID    `json:"id"`
-	Nome     string       `json:"nome"`
-	Peso     int          `json:"peso"`
-	Jogos    []JogoEntity `json:"jogos"`
-	Criado   time.Time    `json:"criado"`
-	Alterado time.Time    `json:"alterado"`
-	Status   bool         `json:"status"`
+	ID           entity.ID    `json:"id"`
+	CampeonatoID string       `json:"campeonato_id"`
+	Nome         string       `json:"nome"`
+	Peso         int          `json:"peso"`
+	Jogos        []JogoEntity `json:"jogos"`
+	Criado       time.Time    `json:"criado"`
+	Alterado     time.Time    `json:"alterado"`
+	Status       bool         `json:"status"`
 }
 
-func NewRodada(nome string, peso int) (*RodadaEntity, error) {
+func NewRodada(campeaontoId string, nome string, peso int) (*RodadaEntity, error) {
 	rodada := &RodadaEntity{
-		ID:       entity.NewID(),
-		Nome:     nome,
-		Peso:     peso,
-		Jogos:    []JogoEntity{},
-		Criado:   time.Now(),
-		Alterado: time.Time{},
-		Status:   true,
+		ID:           entity.NewID(),
+		CampeonatoID: campeaontoId,
+		Nome:         nome,
+		Peso:         peso,
+		Jogos:        []JogoEntity{},
+		Criado:       time.Now(),
+		Alterado:     time.Time{},
+		Status:       true,
 	}
 
 	err := rodada.Validate()
@@ -44,6 +47,9 @@ func NewRodada(nome string, peso int) (*RodadaEntity, error) {
 }
 
 func (r *RodadaEntity) Validate() error {
+	if len(r.CampeonatoID) <= 0 {
+		return errors.New(RodadaEntityMsgErrorCampeonatoIdRequerido)
+	}
 	if len(r.Nome) <= 0 {
 		return errors.New(RodadaEntityMsgErrorNomeRodadaRequerido)
 	}
