@@ -7,19 +7,21 @@ import (
 )
 
 const (
-	RodadaEntityPesoMinimoRodada            int    = 10
-	RodadaEntitypesoIncrementadoNaRodada    int    = 1
-	RodadaEntityMsgErrorNomeRodadaRequerido string = "Nome da rodada não definido"
-	RodadaEntityMsgErrorPesoRodadaRequerido string = "O peso não pode ser menor que 10"
+	RodadaEntityPesoMinimoRodada               int    = 10
+	RodadaEntitypesoIncrementadoNaRodada       int    = 1
+	RodadaEntityMsgErrorNomeRodadaRequerido    string = "Nome da rodada não definido"
+	RodadaEntityMsgErrorPesoRodadaRequerido    string = "O peso não pode ser menor que 10"
+	RodadaEntityMsgErrorJogoNaoPercenteARodada string = "Este jogo não pertece a esta rodada"
 )
 
 type RodadaEntity struct {
-	ID       entity.ID `json:"id"`
-	Nome     string    `json:"nome"`
-	Peso     int       `json:"peso"`
-	Criado   time.Time `json:"criado"`
-	Alterado time.Time `json:"alterado"`
-	Status   bool      `json:"status"`
+	ID       entity.ID    `json:"id"`
+	Nome     string       `json:"nome"`
+	Peso     int          `json:"peso"`
+	Jogos    []JogoEntity `json:"jogos"`
+	Criado   time.Time    `json:"criado"`
+	Alterado time.Time    `json:"alterado"`
+	Status   bool         `json:"status"`
 }
 
 func NewRodada(nome string, peso int) (*RodadaEntity, error) {
@@ -27,6 +29,7 @@ func NewRodada(nome string, peso int) (*RodadaEntity, error) {
 		ID:       entity.NewID(),
 		Nome:     nome,
 		Peso:     peso,
+		Jogos:    []JogoEntity{},
 		Criado:   time.Now(),
 		Alterado: time.Time{},
 		Status:   true,
@@ -47,6 +50,14 @@ func (r *RodadaEntity) Validate() error {
 	if r.Peso < RodadaEntityPesoMinimoRodada {
 		return errors.New(RodadaEntityMsgErrorPesoRodadaRequerido)
 	}
+	return nil
+}
+
+func (r *RodadaEntity) AddJogo(jogo *JogoEntity) error {
+	if jogo.RodadaID != r.ID.String() {
+		return errors.New(RodadaEntityMsgErrorJogoNaoPercenteARodada)
+	}
+	r.Jogos = append(r.Jogos, *jogo)
 	return nil
 }
 

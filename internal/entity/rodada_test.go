@@ -2,6 +2,7 @@ package entity
 
 import (
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -30,6 +31,29 @@ func TestRodada(t *testing.T) {
 
 		rodada.Enable()
 		assert.Equal(t, true, rodada.Status)
+	})
+
+	t.Run("Adicionar jogos", func(t *testing.T) {
+		rodada, _ := NewRodada("Rodada 01", 10)
+		assert.NotNil(t, rodada)
+		jogo1, _ := NewJogo(rodada.ID.String(), "ta1ID", "tb1ID", time.Now(), "Campo")
+		jogo2, _ := NewJogo(rodada.ID.String(), "ta2ID", "tb2ID", time.Now(), "Campo")
+		err := rodada.AddJogo(jogo1)
+		assert.Nil(t, err)
+		rodada.AddJogo(jogo2)
+		assert.Nil(t, err)
+		assert.Equal(t, 2, len(rodada.Jogos))
+	})
+	t.Run("Adicionar jogos de outra rodada", func(t *testing.T) {
+		rodada, _ := NewRodada("Rodada 01", 10)
+		assert.NotNil(t, rodada)
+		jogo1, _ := NewJogo(rodada.ID.String(), "ta1ID", "tb1ID", time.Now(), "Campo")
+		jogo2, _ := NewJogo("rid", "ta2ID", "tb2ID", time.Now(), "Campo")
+		err := rodada.AddJogo(jogo1)
+		assert.Equal(t, 1, len(rodada.Jogos))
+		err = rodada.AddJogo(jogo2)
+		assert.EqualError(t, err, RodadaEntityMsgErrorJogoNaoPercenteARodada)
+
 	})
 
 	t.Run("Criando rodada com nome em branco", func(t *testing.T) {
