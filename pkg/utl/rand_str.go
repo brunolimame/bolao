@@ -5,17 +5,16 @@ import (
 	"time"
 )
 
-func RandStr(limit int) string {
-	charset := "aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ@#$-_=*%&"
-	if limit <= 0 {
-		limit = 1
+func RandStr(length int) string {
+	charset := []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-+=[]{}|;':\",.<>?/`~")
+	if length <= 0 {
+		length = 1
 	}
-	var seededRand *rand.Rand = rand.New(
-		rand.NewSource(time.Now().UnixNano()))
+	rand.Seed(time.Now().UnixNano())
 
-	b := make([]byte, limit)
+	b := make([]rune, length)
 	for i := range b {
-		b[i] = charset[seededRand.Intn(len(charset))]
+		b[i] = charset[rand.Intn(len(charset))]
 	}
 	return string(b)
 }
