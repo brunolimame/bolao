@@ -52,6 +52,7 @@ func TestRodada(t *testing.T) {
 		jogo1, _ := NewJogo(rodada.ID.String(), "ta1ID", "tb1ID", time.Now(), "Campo")
 		jogo2, _ := NewJogo("rid", "ta2ID", "tb2ID", time.Now(), "Campo")
 		err := rodada.AddJogo(jogo1)
+		assert.Nil(t, err)
 		assert.Equal(t, 1, len(rodada.Jogos))
 		err = rodada.AddJogo(jogo2)
 		assert.EqualError(t, err, RodadaEntityMsgErrorJogoNaoPercenteARodada)
