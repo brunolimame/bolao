@@ -44,7 +44,7 @@ func TestRodada(t *testing.T) {
 		assert.Nil(t, err)
 		assert.Equal(t, 2, len(rodada.Jogos))
 	})
-	t.Run("Adicionar jogos de outra rodada", func(t *testing.T) {
+	t.Run("Não aceitar adicionar jogos de outra rodada", func(t *testing.T) {
 		rodada, _ := NewRodada("Rodada 01", 10)
 		assert.NotNil(t, rodada)
 		jogo1, _ := NewJogo(rodada.ID.String(), "ta1ID", "tb1ID", time.Now(), "Campo")
