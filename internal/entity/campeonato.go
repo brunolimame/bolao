@@ -6,7 +6,10 @@ import (
 	"time"
 )
 
-const CampeonatoEntityMsgErrorNomeRequerido = "Nome do campeonato não definido"
+const (
+	CampeonatoEntityMsgErrorNomeRequerido                 = "Nome do campeonato não definido"
+	CampeonatoEntityMsgErrorRodadaNaoPercenteAoCampeonato = "A rodada não pertence a este campeonato"
+)
 
 type CampeonatoEntity struct {
 	ID       entity.ID      `json:"id"`
@@ -42,8 +45,12 @@ func (c *CampeonatoEntity) Validate() error {
 	return nil
 }
 
-func (c *CampeonatoEntity) AddRodada(rodada *RodadaEntity) {
+func (c *CampeonatoEntity) AddRodada(rodada *RodadaEntity) error {
+	if rodada.CampeonatoID != c.ID.String() {
+		return errors.New(CampeonatoEntityMsgErrorRodadaNaoPercenteAoCampeonato)
+	}
 	c.Rodadas = append(c.Rodadas, *rodada)
+	return nil
 }
 
 func (c *CampeonatoEntity) Enable() {

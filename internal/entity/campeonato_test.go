@@ -33,11 +33,24 @@ func TestCampeonato(t *testing.T) {
 	t.Run("Adicionar rodada", func(t *testing.T) {
 		campeonato, _ := NewCampeonato("Campeonato Brasileiro")
 		assert.NotNil(t, campeonato)
-		rodada1, _ := NewRodada("Rodada 01", 10)
-		rodada2, _ := NewRodada("Rodada 02", 10)
+		rodada1, _ := NewRodada(campeonato.ID.String(),"Rodada 01", 10)
+		rodada2, _ := NewRodada(campeonato.ID.String(),"Rodada 02", 10)
 		campeonato.AddRodada(rodada1)
 		campeonato.AddRodada(rodada2)
 		assert.Equal(t, 2, len(campeonato.Rodadas))
+	})
+	t.Run("Não aceitar adicionar rodadas de outro campeonato", func(t *testing.T) {
+		campeonato, _ := NewCampeonato("Campeonato Brasileiro")
+		assert.NotNil(t, campeonato)
+		rodada1, _ := NewRodada(campeonato.ID.String(),"Rodada 01", 10)
+		rodada2, _ := NewRodada("c1","Rodada 02", 10)
+		err := campeonato.AddRodada(rodada1)
+		assert.Nil(t, err)
+		assert.Equal(t, 1, len(campeonato.Rodadas))
+		err = campeonato.AddRodada(rodada2)
+		assert.NotNil(t, err)
+		assert.EqualError(t, err, CampeonatoEntityMsgErrorRodadaNaoPercenteAoCampeonato)
+		
 	})
 
 	t.Run("Criando campeonato com nome em branco", func(t *testing.T) {
