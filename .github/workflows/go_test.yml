@@ -1,0 +1,37 @@
+name: Go Tests
+
+on:
+  push:
+    branches: 
+      - main
+      - dev
+      - 'feature/**'
+      - 'releases/**'
+  pull_request:
+    branches: 
+      - main
+      - dev
+      - 'feature/**'
+      - 'releases/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: 'stable'
+
+    - name: Test
+      run: go test ./... -race -covermode=atomic -coverprofile=coverage.out
+    
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+        files: ./coverage.out # optional
+        fail_ci_if_error: true # optional (default = false)
+        verbose: true # optional (default = false)
