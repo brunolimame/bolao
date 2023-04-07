@@ -19,5 +19,5 @@ func (u *User) Create(user *entity.UserEntity) error {
 }
 
 func (u *User) FindByEmail(email string) (*entity.UserEntity, error) {
-
+	return nil, nil
 }
