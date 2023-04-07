@@ -17,8 +17,8 @@ func TestPalpite(t *testing.T) {
 		assert.Equal(t, "p1", palpite.PlayerID)
 		assert.NotEmpty(t, palpite.JogoID)
 		assert.Equal(t, "j1", palpite.JogoID)
-		assert.Equal(t, 0, palpite.PlacarA)
-		assert.Equal(t, 0, palpite.PlacarB)
+		assert.Equal(t, 0, palpite.GolsA)
+		assert.Equal(t, 0, palpite.GolsB)
 		assert.Equal(t, 0, palpite.Pontos)
 		assert.NotEmpty(t, palpite.Criado)
 		assert.Empty(t, palpite.Alterado)
@@ -46,11 +46,11 @@ func TestPalpite(t *testing.T) {
 	t.Run("Adicionando placar", func(t *testing.T) {
 		palpite, _ := NewPalpite("p1", "j1")
 		assert.NotNil(t, palpite)
-		assert.Equal(t, 0, palpite.PlacarA)
-		assert.Equal(t, 0, palpite.PlacarB)
-		palpite.SetPlacar(5, 2)
-		assert.Equal(t, 5, palpite.PlacarA)
-		assert.Equal(t, 2, palpite.PlacarB)
+		assert.Equal(t, 0, palpite.GolsA)
+		assert.Equal(t, 0, palpite.GolsB)
+		palpite.SetGols(5, 2)
+		assert.Equal(t, 5, palpite.GolsA)
+		assert.Equal(t, 2, palpite.GolsB)
 	})
 
 	t.Run("Criando palpite sem o jogo", func(t *testing.T) {

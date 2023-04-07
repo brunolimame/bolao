@@ -15,8 +15,8 @@ type PalpiteEntity struct {
 	ID       entity.ID `json:"id"`
 	PlayerID string    `json:"player_id"`
 	JogoID   string    `json:"jogo_id"`
-	PlacarA  int       `json:"placar_a"`
-	PlacarB  int       `json:"placar_b"`
+	GolsA    int       `json:"gols_a"`
+	GolsB    int       `json:"gols_b"`
 	Pontos   int       `json:"pontos"`
 	Criado   time.Time `json:"criado"`
 	Alterado time.Time `json:"alterado"`
@@ -28,8 +28,8 @@ func NewPalpite(playerId string, jogoId string) (*PalpiteEntity, error) {
 		ID:       entity.NewID(),
 		PlayerID: playerId,
 		JogoID:   jogoId,
-		PlacarA:  0,
-		PlacarB:  0,
+		GolsA:    0,
+		GolsB:    0,
 		Pontos:   0,
 		Criado:   time.Now(),
 		Alterado: time.Time{},
@@ -54,9 +54,9 @@ func (p *PalpiteEntity) Validate() error {
 	return nil
 }
 
-func (p *PalpiteEntity) SetPlacar(golsTimeA int, golsTimeB int) {
-	p.PlacarA = golsTimeA
-	p.PlacarB = golsTimeB
+func (p *PalpiteEntity) SetGols(golsTimeA int, golsTimeB int) {
+	p.GolsA = golsTimeA
+	p.GolsB = golsTimeB
 }
 
 func (p *PalpiteEntity) SetPontos(pontos int) {
@@ -69,4 +69,9 @@ func (p *PalpiteEntity) Enable() {
 
 func (p *PalpiteEntity) Disable() {
 	p.Status = false
+}
+
+func (p *PalpiteEntity) PontuarPalpite(GolsTimeA int, GolsTimeB int) error {
+
+	return nil
 }
