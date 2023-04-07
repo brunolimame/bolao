@@ -18,6 +18,3 @@ func (u *User) Create(user *entity.UserEntity) error {
 	return u.DB.Create(user).Error
 }
 
-func (u *User) FindByEmail(email string) (*entity.UserEntity, error) {
-	return nil, nil
-}
