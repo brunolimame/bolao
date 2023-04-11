@@ -67,4 +67,109 @@ func TestPalpite(t *testing.T) {
 		assert.EqualError(t, err, PalpiteEntityMsgErrorPlayerRequerido)
 	})
 
+	t.Run("Criando palpite sem o jogo e player", func(t *testing.T) {
+		palpite, err := NewPalpite("", "")
+		assert.Nil(t, palpite)
+		assert.NotNil(t, err)
+		assert.EqualError(t, err, PalpiteEntityMsgErrorIdJogoRequerido)
+	})
+
+	t.Run("Pontuação: Acertar o placar exato da partida", func(t *testing.T) {
+		palpite, _ := NewPalpite("p1", "j1")
+		assert.NotNil(t, palpite)
+		assert.Equal(t, 0, palpite.Pontos)
+		palpite.SetGols(5, 2)
+
+		palpite.PontuarPalpite(1, 5, 2)
+		assert.Equal(t, PalpiteEntityPontosAcertarPlacarExato, palpite.Pontos)
+
+		palpite.PontuarPalpite(2, 5, 2)
+		assert.Equal(t, PalpiteEntityPontosAcertarPlacarExato*2, palpite.Pontos)
+	})
+	t.Run("Pontuação: Acertar o vencedor e o número de gols da equipe vencedora", func(t *testing.T) {
+		palpite, _ := NewPalpite("p1", "j1")
+		assert.NotNil(t, palpite)
+		assert.Equal(t, 0, palpite.Pontos)
+		palpite.SetGols(5, 2)
+
+		palpite.PontuarPalpite(1, 5, 1)
+		assert.Equal(t, PalpiteEntityPontosAcertarVencedorGolsVencedor, palpite.Pontos)
+
+		palpite.PontuarPalpite(2, 5, 1)
+		assert.Equal(t, PalpiteEntityPontosAcertarVencedorGolsVencedor*2, palpite.Pontos)
+	})
+	t.Run("Pontuação: Acertar o vencedor e o número de gols da equipe vencedora", func(t *testing.T) {
+		palpite, _ := NewPalpite("p1", "j1")
+		assert.NotNil(t, palpite)
+		assert.Equal(t, 0, palpite.Pontos)
+		palpite.SetGols(5, 3)
+
+		palpite.PontuarPalpite(1, 6, 4)
+		assert.Equal(t, PalpiteEntityPontosAcertarVencedorDiferencaGols, palpite.Pontos)
+
+		palpite.PontuarPalpite(2, 6, 4)
+		assert.Equal(t, PalpiteEntityPontosAcertarVencedorDiferencaGols*2, palpite.Pontos)
+	})
+	
+	t.Run("Pontuação: Acertar o vencedor e a diferença de gols entre equipes", func(t *testing.T) {
+		palpite, _ := NewPalpite("p1", "j1")
+		assert.NotNil(t, palpite)
+		assert.Equal(t, 0, palpite.Pontos)
+		palpite.SetGols(5, 3)
+
+		palpite.PontuarPalpite(1, 6, 4)
+		assert.Equal(t, PalpiteEntityPontosAcertarVencedorDiferencaGols, palpite.Pontos)
+
+		palpite.PontuarPalpite(2, 6, 4)
+		assert.Equal(t, PalpiteEntityPontosAcertarVencedorDiferencaGols*2, palpite.Pontos)
+	})
+	t.Run("Pontuação: Acertar o vencedor e o número de gols da equipe perdedora", func(t *testing.T) {
+		palpite, _ := NewPalpite("p1", "j1")
+		assert.NotNil(t, palpite)
+		assert.Equal(t, 0, palpite.Pontos)
+		palpite.SetGols(5, 3)
+
+		palpite.PontuarPalpite(1, 6, 3)
+		assert.Equal(t, PalpiteEntityPontosAcertarVencedorGolsPerdedor, palpite.Pontos)
+
+		palpite.PontuarPalpite(2, 6, 3)
+		assert.Equal(t, PalpiteEntityPontosAcertarVencedorGolsPerdedor*2, palpite.Pontos)
+	})
+	t.Run("Pontuação: Acertar que a partida terminaria em empate", func(t *testing.T) {
+		palpite, _ := NewPalpite("p1", "j1")
+		assert.NotNil(t, palpite)
+		assert.Equal(t, 0, palpite.Pontos)
+		palpite.SetGols(2, 2)
+
+		palpite.PontuarPalpite(1, 3, 3)
+		assert.Equal(t, PalpiteEntityPontosAcertarEmpate, palpite.Pontos)
+
+		palpite.PontuarPalpite(2, 3, 3)
+		assert.Equal(t, PalpiteEntityPontosAcertarEmpate*2, palpite.Pontos)
+	})
+	t.Run("Pontuação: Acertar apenas o vencedor da partida", func(t *testing.T) {
+		palpite, _ := NewPalpite("p1", "j1")
+		assert.NotNil(t, palpite)
+		assert.Equal(t, 0, palpite.Pontos)
+		palpite.SetGols(1, 0)
+
+		palpite.PontuarPalpite(1, 4, 2)
+		assert.Equal(t, PalpiteEntityPontosAcertarApenasVencedor, palpite.Pontos)
+
+		palpite.PontuarPalpite(2, 4, 2)
+		assert.Equal(t, PalpiteEntityPontosAcertarApenasVencedor*2, palpite.Pontos)
+	})
+	t.Run("Pontuação: Previu que o jogo seria um empate e não foi empate", func(t *testing.T) {
+		palpite, _ := NewPalpite("p1", "j1")
+		assert.NotNil(t, palpite)
+		assert.Equal(t, 0, palpite.Pontos)
+		palpite.SetGols(1, 1)
+
+		palpite.PontuarPalpite(1, 2, 0)
+		assert.Equal(t, PalpiteEntityPontosApostarEmpate, palpite.Pontos)
+
+		palpite.PontuarPalpite(2, 2, 0)
+		assert.Equal(t, PalpiteEntityPontosApostarEmpate*2, palpite.Pontos)
+	})
+
 }

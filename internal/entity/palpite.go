@@ -3,12 +3,20 @@ package entity
 import (
 	"bolao/pkg/entity"
 	"errors"
+	"math"
 	"time"
 )
 
 const (
-	PalpiteEntityMsgErrorIdJogoRequerido = "ID do jogo é requerido"
-	PalpiteEntityMsgErrorPlayerRequerido = "ID do Player é requerido"
+	PalpiteEntityMsgErrorIdJogoRequerido            = "ID do jogo é requerido"
+	PalpiteEntityMsgErrorPlayerRequerido            = "ID do Player é requerido"
+	PalpiteEntityPontosAcertarPlacarExato           = 25
+	PalpiteEntityPontosAcertarVencedorGolsVencedor  = 20
+	PalpiteEntityPontosAcertarVencedorDiferencaGols = 15
+	PalpiteEntityPontosAcertarVencedorGolsPerdedor  = 12
+	PalpiteEntityPontosAcertarEmpate                = 8
+	PalpiteEntityPontosAcertarApenasVencedor        = 4
+	PalpiteEntityPontosApostarEmpate                = 2
 )
 
 type PalpiteEntity struct {
@@ -71,7 +79,34 @@ func (p *PalpiteEntity) Disable() {
 	p.Status = false
 }
 
-func (p *PalpiteEntity) PontuarPalpite(GolsTimeA int, GolsTimeB int) error {
+func (p *PalpiteEntity) PontuarPalpite(PesoRodada int, JogoTimeA int, JogoTimeB int) {
 
-	return nil
+	pontuacao := 0
+	palpiteTimeA := p.GolsA
+	palpiteTimeB := p.GolsB
+	diferencaGols := int(math.Abs(float64(JogoTimeA-JogoTimeB))) - int(math.Abs(float64(palpiteTimeA-palpiteTimeB)))
+
+	if palpiteTimeA == JogoTimeA && palpiteTimeB == JogoTimeB { // Acertar o placar exato da partida, 25 pontos
+		pontuacao = PalpiteEntityPontosAcertarPlacarExato * PesoRodada
+	} else if (JogoTimeA > JogoTimeB && palpiteTimeA > palpiteTimeB) || (JogoTimeA < JogoTimeB && palpiteTimeA < palpiteTimeB) {
+		//Acertou o vencedor
+		if palpiteTimeA == JogoTimeA { //Acertar o vencedor e o número de gols da equipe vencedora
+			pontuacao = PalpiteEntityPontosAcertarVencedorGolsVencedor * PesoRodada
+		} else if diferencaGols == 0 { //Acertar o vencedor e a diferença de gols entre o equipes
+			pontuacao = PalpiteEntityPontosAcertarVencedorDiferencaGols * PesoRodada
+		} else if (JogoTimeA > JogoTimeB && palpiteTimeB == JogoTimeB) || (JogoTimeA < JogoTimeB && palpiteTimeA == JogoTimeA) {
+			pontuacao = PalpiteEntityPontosAcertarVencedorGolsPerdedor * PesoRodada //Acertar o vencedor e o número de gols da equipe perdedora
+		} else {
+			pontuacao = PalpiteEntityPontosAcertarApenasVencedor * PesoRodada //Acertar apenas o vencedor da partida
+		}
+	} else if palpiteTimeA == palpiteTimeB && JogoTimeA == JogoTimeB {
+		pontuacao = PalpiteEntityPontosAcertarEmpate * PesoRodada //Acertar que a partida terminaria em empate
+	} else if palpiteTimeA == palpiteTimeB && JogoTimeA != JogoTimeB {
+
+		pontuacao = PalpiteEntityPontosApostarEmpate * PesoRodada //Previu que o jogo seria um empate e não foi empate
+	} else {
+		pontuacao = 0
+	}
+
+	p.Pontos = pontuacao
 }
