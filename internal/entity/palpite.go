@@ -3,20 +3,28 @@ package entity
 import (
 	"bolao/pkg/entity"
 	"errors"
+	"math"
 	"time"
 )
 
 const (
-	PalpiteEntityMsgErrorIdJogoRequerido = "ID do jogo é requerido"
-	PalpiteEntityMsgErrorPlayerRequerido = "ID do Player é requerido"
+	PalpiteEntityMsgErrorIdJogoRequerido            = "ID do jogo é requerido"
+	PalpiteEntityMsgErrorPlayerRequerido            = "ID do Player é requerido"
+	PalpiteEntityPontosAcertarPlacarExato           = 25
+	PalpiteEntityPontosAcertarVencedorGolsVencedor  = 20
+	PalpiteEntityPontosAcertarVencedorDiferencaGols = 15
+	PalpiteEntityPontosAcertarVencedorGolsPerdedor  = 12
+	PalpiteEntityPontosAcertarEmpate                = 8
+	PalpiteEntityPontosAcertarApenasVencedor        = 4
+	PalpiteEntityPontosApostarEmpate                = 2
 )
 
 type PalpiteEntity struct {
 	ID       entity.ID `json:"id"`
 	PlayerID string    `json:"player_id"`
 	JogoID   string    `json:"jogo_id"`
-	PlacarA  int       `json:"placar_a"`
-	PlacarB  int       `json:"placar_b"`
+	GolsA    int       `json:"gols_a"`
+	GolsB    int       `json:"gols_b"`
 	Pontos   int       `json:"pontos"`
 	Criado   time.Time `json:"criado"`
 	Alterado time.Time `json:"alterado"`
@@ -28,8 +36,8 @@ func NewPalpite(playerId string, jogoId string) (*PalpiteEntity, error) {
 		ID:       entity.NewID(),
 		PlayerID: playerId,
 		JogoID:   jogoId,
-		PlacarA:  0,
-		PlacarB:  0,
+		GolsA:    0,
+		GolsB:    0,
 		Pontos:   0,
 		Criado:   time.Now(),
 		Alterado: time.Time{},
@@ -54,9 +62,9 @@ func (p *PalpiteEntity) Validate() error {
 	return nil
 }
 
-func (p *PalpiteEntity) SetPlacar(golsTimeA int, golsTimeB int) {
-	p.PlacarA = golsTimeA
-	p.PlacarB = golsTimeB
+func (p *PalpiteEntity) SetGols(golsTimeA int, golsTimeB int) {
+	p.GolsA = golsTimeA
+	p.GolsB = golsTimeB
 }
 
 func (p *PalpiteEntity) SetPontos(pontos int) {
@@ -69,4 +77,36 @@ func (p *PalpiteEntity) Enable() {
 
 func (p *PalpiteEntity) Disable() {
 	p.Status = false
+}
+
+func (p *PalpiteEntity) PontuarPalpite(PesoRodada int, JogoTimeA int, JogoTimeB int) {
+
+	pontuacao := 0
+	palpiteTimeA := p.GolsA
+	palpiteTimeB := p.GolsB
+	diferencaGols := int(math.Abs(float64(JogoTimeA-JogoTimeB))) - int(math.Abs(float64(palpiteTimeA-palpiteTimeB)))
+
+	if palpiteTimeA == JogoTimeA && palpiteTimeB == JogoTimeB { // Acertar o placar exato da partida, 25 pontos
+		pontuacao = PalpiteEntityPontosAcertarPlacarExato * PesoRodada
+	} else if (JogoTimeA > JogoTimeB && palpiteTimeA > palpiteTimeB) || (JogoTimeA < JogoTimeB && palpiteTimeA < palpiteTimeB) {
+		//Acertou o vencedor
+		if palpiteTimeA == JogoTimeA { //Acertar o vencedor e o número de gols da equipe vencedora
+			pontuacao = PalpiteEntityPontosAcertarVencedorGolsVencedor * PesoRodada
+		} else if diferencaGols == 0 { //Acertar o vencedor e a diferença de gols entre o equipes
+			pontuacao = PalpiteEntityPontosAcertarVencedorDiferencaGols * PesoRodada
+		} else if (JogoTimeA > JogoTimeB && palpiteTimeB == JogoTimeB) || (JogoTimeA < JogoTimeB && palpiteTimeA == JogoTimeA) {
+			pontuacao = PalpiteEntityPontosAcertarVencedorGolsPerdedor * PesoRodada //Acertar o vencedor e o número de gols da equipe perdedora
+		} else {
+			pontuacao = PalpiteEntityPontosAcertarApenasVencedor * PesoRodada //Acertar apenas o vencedor da partida
+		}
+	} else if palpiteTimeA == palpiteTimeB && JogoTimeA == JogoTimeB {
+		pontuacao = PalpiteEntityPontosAcertarEmpate * PesoRodada //Acertar que a partida terminaria em empate
+	} else if palpiteTimeA == palpiteTimeB && JogoTimeA != JogoTimeB {
+
+		pontuacao = PalpiteEntityPontosApostarEmpate * PesoRodada //Previu que o jogo seria um empate e não foi empate
+	} else {
+		pontuacao = 0
+	}
+
+	p.Pontos = pontuacao
 }
