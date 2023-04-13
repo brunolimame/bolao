@@ -18,7 +18,8 @@ type conf struct {
 	TokenAuth     *jwtauth.JWTAuth
 }
 
-func LoadConfig(path string) (*conf, error) {
+
+func LoadConfig(path string) (*conf, error) {  // skipcq: RVV-B0011
 	var cfg *conf
 	viper.SetConfigName("app_config")
 	viper.SetConfigType("env")

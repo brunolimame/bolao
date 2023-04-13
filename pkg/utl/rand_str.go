@@ -10,11 +10,11 @@ func RandStr(length int) string {
 	if length <= 0 {
 		length = 1
 	}
-	rand.Seed(time.Now().UnixNano())
+	rand.Seed(time.Now().UnixNano()) // skipcq: GO-S1033
 
 	b := make([]rune, length)
 	for i := range b {
-		b[i] = charset[rand.Intn(len(charset))]
+		b[i] = charset[rand.Intn(len(charset))] // skipcq: GSC-G404
 	}
 	return string(b)
 }

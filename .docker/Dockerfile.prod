@@ -4,5 +4,6 @@ COPY . .
 RUN GOOS=linux CGO_ENABLE=0 go build -ldflags="-w -s" -o bolao-server .
 
 FROM scratch
+WORKDIR /app
 COPY --from=builder /app/bolao-server .
 CMD ["./bolao-server"]
