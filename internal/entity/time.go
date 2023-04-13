@@ -17,7 +17,7 @@ type TimeEntity struct {
 	Status   bool      `json:"status"`
 }
 
-func NewTime(nome string, escudo string) (*TimeEntity, error) {
+func NewTime(nome, escudo string) (*TimeEntity, error) {
 	time := &TimeEntity{
 		ID:       entity.NewID(),
 		Nome:     nome,
