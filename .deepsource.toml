@@ -5,3 +5,7 @@ name = "go"
 
   [analyzers.meta]
   import_root = "github.com/brunolimame/bolao"
+
+[[analyzers]]
+name = "test-coverage"
+enabled = true
