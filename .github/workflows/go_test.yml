@@ -38,13 +38,11 @@ jobs:
 
     - name: Report results to DeepSource
       run: |
+        # Install the CLI
+        curl https://deepsource.io/cli | sh
 
-    # Install deepsource CLI
-      curl https://deepsource.io/cli | sh
-
-    # From the root directory, run the report coverage command
-      ./bin/deepsource report --analyzer test-coverage --key go --value-file ./coverage.out
-
-    env:
-      DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
+        # Send the report to DeepSource
+        ./bin/deepsource report --analyzer test-coverage --key <language> --value-file <path/to/coverage/file>
+      env:
+        DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
     
