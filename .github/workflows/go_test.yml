@@ -42,7 +42,7 @@ jobs:
         curl https://deepsource.io/cli | sh
 
         # Send the report to DeepSource
-        ./bin/deepsource report --analyzer test-coverage --key <language> --value-file <path/to/coverage/file>
+        ./bin/deepsource report --analyzer test-coverage --key go --value-file ./coverage.out
       env:
         DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
     
