@@ -8,15 +8,15 @@ import (
 )
 
 const (
-	PalpiteEntityMsgErrorIdJogoRequerido            = "ID do jogo é requerido"
-	PalpiteEntityMsgErrorPlayerRequerido            = "ID do Player é requerido"
-	PalpiteEntityPontosAcertarPlacarExato           = 25
-	PalpiteEntityPontosAcertarVencedorGolsVencedor  = 20
-	PalpiteEntityPontosAcertarVencedorDiferencaGols = 15
-	PalpiteEntityPontosAcertarVencedorGolsPerdedor  = 12
-	PalpiteEntityPontosAcertarEmpate                = 8
-	PalpiteEntityPontosAcertarApenasVencedor        = 4
-	PalpiteEntityPontosApostarEmpate                = 2
+	PalpiteEntityMsgErrorIdJogoRequerido            string = "ID do jogo é requerido"
+	PalpiteEntityMsgErrorPlayerRequerido            string = "ID do Player é requerido"
+	PalpiteEntityPontosAcertarPlacarExato           int    = 25
+	PalpiteEntityPontosAcertarVencedorGolsVencedor  int    = 20
+	PalpiteEntityPontosAcertarVencedorDiferencaGols int    = 15
+	PalpiteEntityPontosAcertarVencedorGolsPerdedor  int    = 12
+	PalpiteEntityPontosAcertarEmpate                int    = 8
+	PalpiteEntityPontosAcertarApenasVencedor        int    = 4
+	PalpiteEntityPontosApostarEmpate                int    = 2
 )
 
 type PalpiteEntity struct {
@@ -31,7 +31,7 @@ type PalpiteEntity struct {
 	Status   bool      `json:"status"`
 }
 
-func NewPalpite(playerId string, jogoId string) (*PalpiteEntity, error) {
+func NewPalpite(playerId, jogoId string) (*PalpiteEntity, error) {
 	palpite := &PalpiteEntity{
 		ID:       entity.NewID(),
 		PlayerID: playerId,
@@ -62,7 +62,7 @@ func (p *PalpiteEntity) Validate() error {
 	return nil
 }
 
-func (p *PalpiteEntity) SetGols(golsTimeA int, golsTimeB int) {
+func (p *PalpiteEntity) SetGols(golsTimeA, golsTimeB int) {
 	p.GolsA = golsTimeA
 	p.GolsB = golsTimeB
 }
@@ -79,7 +79,7 @@ func (p *PalpiteEntity) Disable() {
 	p.Status = false
 }
 
-func (p *PalpiteEntity) PontuarPalpite(PesoRodada int, JogoTimeA int, JogoTimeB int) {
+func (p *PalpiteEntity) PontuarPalpite(PesoRodada, JogoTimeA, JogoTimeB int) {
 
 	pontuacao := 0
 	palpiteTimeA := p.GolsA

@@ -7,8 +7,8 @@ import (
 )
 
 const (
-	CampeonatoEntityMsgErrorNomeRequerido                 = "Nome do campeonato não definido"
-	CampeonatoEntityMsgErrorRodadaNaoPercenteAoCampeonato = "A rodada não pertence a este campeonato"
+	CampeonatoEntityMsgErrorNomeRequerido                 string = "Nome do campeonato não definido"
+	CampeonatoEntityMsgErrorRodadaNaoPercenteAoCampeonato string = "A rodada não pertence a este campeonato"
 )
 
 type CampeonatoEntity struct {

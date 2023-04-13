@@ -7,10 +7,10 @@ import (
 )
 
 const (
-	JogoEntityMsgErrorRodadaIdRequerida = "ID da Rodada requerida"
-	JogoEntityMsgErrorTimeARequerido    = "Time A requerido"
-	JogoEntityMsgErrorTimeBRequerido    = "Time B requerido"
-	JogoEntityMsgErrorGolsInvalido      = "O número de gols não pode ser menor que 0"
+	JogoEntityMsgErrorRodadaIdRequerida string = "ID da Rodada requerida"
+	JogoEntityMsgErrorTimeARequerido    string = "Time A requerido"
+	JogoEntityMsgErrorTimeBRequerido    string = "Time B requerido"
+	JogoEntityMsgErrorGolsInvalido      string = "O número de gols não pode ser menor que 0"
 )
 
 type JogoEntity struct {
@@ -27,7 +27,7 @@ type JogoEntity struct {
 	Status   bool      `json:"status"`
 }
 
-func NewJogo(rodadaId string, timeAId string, timeBId string, dia time.Time, local string) (*JogoEntity, error) {
+func NewJogo(rodadaId, timeAId, timeBId string, dia time.Time, local string) (*JogoEntity, error) {
 	jogo := &JogoEntity{
 		ID:       entity.NewID(),
 		RodadaID: rodadaId,

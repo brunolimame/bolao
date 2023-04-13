@@ -26,7 +26,7 @@ type RodadaEntity struct {
 	Status       bool         `json:"status"`
 }
 
-func NewRodada(campeaontoId string, nome string, peso int) (*RodadaEntity, error) {
+func NewRodada(campeaontoId, nome string, peso int) (*RodadaEntity, error) {
 	rodada := &RodadaEntity{
 		ID:           entity.NewID(),
 		CampeonatoID: campeaontoId,

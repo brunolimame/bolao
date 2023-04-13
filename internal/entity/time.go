@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-const TimeEntityMsgErrorNomeTimeRequerido = "Nome do time não definido"
+const TimeEntityMsgErrorNomeTimeRequerido string = "Nome do time não definido"
 
 type TimeEntity struct {
 	ID       entity.ID `json:"id"`

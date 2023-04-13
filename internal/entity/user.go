@@ -11,10 +11,10 @@ import (
 )
 
 const (
-	userEntityDefaultCostPassword       = bcrypt.DefaultCost
-	UserEntityMsgErrorNomeRequerido     = "Nome do usuário não definido"
-	UserEntityMsgErrorEmailRequerido    = "E-mail não definido"
-	UserEntityMsgErrorPasswordRequerido = "Senha não definida"
+	userEntityDefaultCostPassword       int    = bcrypt.DefaultCost
+	UserEntityMsgErrorNomeRequerido     string = "Nome do usuário não definido"
+	UserEntityMsgErrorEmailRequerido    string = "E-mail não definido"
+	UserEntityMsgErrorPasswordRequerido string = "Senha não definida"
 )
 
 type UserEntity struct {
