@@ -84,7 +84,7 @@ func genSalt() (string, error) {
 	return fmt.Sprintf("%x", salt), nil
 }
 
-func (u *UserEntity) EncryptPassword(password string) (string, error) {
+func (*UserEntity) EncryptPassword(password string) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), userEntityDefaultCostPassword)
 	if err != nil {
 		return "", err
