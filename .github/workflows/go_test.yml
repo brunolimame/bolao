@@ -35,3 +35,16 @@ jobs:
         files: ./coverage.out # optional
         fail_ci_if_error: true # optional (default = false)
         verbose: true # optional (default = false)
+
+    - name: Report results to DeepSource
+      run: |
+
+    # Install deepsource CLI
+      curl https://deepsource.io/cli | sh
+
+    # From the root directory, run the report coverage command
+      ./bin/deepsource report --analyzer test-coverage --key go --value-file ./coverage.out
+
+    env:
+      DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
+    
