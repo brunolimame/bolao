@@ -1,3 +1,4 @@
+# skipcq: DOK-DL3007
 FROM golang:latest as builder
 WORKDIR /app
 COPY . . 
