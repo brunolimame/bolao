@@ -89,21 +89,21 @@ func (p *PalpiteEntity) PontuarPalpite(PesoRodada int, JogoTimeA int, JogoTimeB 
 	if palpiteTimeA == JogoTimeA && palpiteTimeB == JogoTimeB { // Acertar o placar exato da partida, 25 pontos
 		pontuacao = PalpiteEntityPontosAcertarPlacarExato * PesoRodada
 	} else if (JogoTimeA > JogoTimeB && palpiteTimeA > palpiteTimeB) || (JogoTimeA < JogoTimeB && palpiteTimeA < palpiteTimeB) {
-		//Acertou o vencedor
-		if palpiteTimeA == JogoTimeA { //Acertar o vencedor e o número de gols da equipe vencedora
+		// Acertou o vencedor
+		if palpiteTimeA == JogoTimeA { // Acertar o vencedor e o número de gols da equipe vencedora
 			pontuacao = PalpiteEntityPontosAcertarVencedorGolsVencedor * PesoRodada
-		} else if diferencaGols == 0 { //Acertar o vencedor e a diferença de gols entre o equipes
+		} else if diferencaGols == 0 { // Acertar o vencedor e a diferença de gols entre o equipes
 			pontuacao = PalpiteEntityPontosAcertarVencedorDiferencaGols * PesoRodada
 		} else if (JogoTimeA > JogoTimeB && palpiteTimeB == JogoTimeB) || (JogoTimeA < JogoTimeB && palpiteTimeA == JogoTimeA) {
-			pontuacao = PalpiteEntityPontosAcertarVencedorGolsPerdedor * PesoRodada //Acertar o vencedor e o número de gols da equipe perdedora
+			pontuacao = PalpiteEntityPontosAcertarVencedorGolsPerdedor * PesoRodada // Acertar o vencedor e o número de gols da equipe perdedora
 		} else {
-			pontuacao = PalpiteEntityPontosAcertarApenasVencedor * PesoRodada //Acertar apenas o vencedor da partida
+			pontuacao = PalpiteEntityPontosAcertarApenasVencedor * PesoRodada // Acertar apenas o vencedor da partida
 		}
 	} else if palpiteTimeA == palpiteTimeB && JogoTimeA == JogoTimeB {
-		pontuacao = PalpiteEntityPontosAcertarEmpate * PesoRodada //Acertar que a partida terminaria em empate
+		pontuacao = PalpiteEntityPontosAcertarEmpate * PesoRodada // Acertar que a partida terminaria em empate
 	} else if palpiteTimeA == palpiteTimeB && JogoTimeA != JogoTimeB {
 
-		pontuacao = PalpiteEntityPontosApostarEmpate * PesoRodada //Previu que o jogo seria um empate e não foi empate
+		pontuacao = PalpiteEntityPontosApostarEmpate * PesoRodada // Previu que o jogo seria um empate e não foi empate
 	} else {
 		pontuacao = 0
 	}
