@@ -35,3 +35,10 @@ jobs:
         files: ./coverage.out # optional
         fail_ci_if_error: true # optional (default = false)
         verbose: true # optional (default = false)
+
+    - name: Report test coverage to DeepSource
+      uses: deepsourcelabs/test-coverage-action@master
+      with:
+        key: go
+        coverage-file: ./coverage.out
+        dsn: ${{ secrets.DEEPSOURCE_DSN }}
