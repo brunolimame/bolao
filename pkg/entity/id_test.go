@@ -11,6 +11,8 @@ func TestEntityId(t *testing.T) {
 	t.Run("Teste gerador de UUID", func(t *testing.T) {
 		newUuid := NewID()
 		assert.NotEmpty(t, newUuid.String())
+		_, err := ParseID(newUuid.String())
+		assert.Nil(t, err)
 	})
 
 	t.Run("Teste validação do UUID", func(t *testing.T) {
