@@ -119,18 +119,6 @@ func TestPalpite(t *testing.T) {
 		palpite.PontuarPalpite(2, 5, 1)
 		assert.Equal(t, PalpiteEntityPontosAcertarVencedorGolsVencedor*2, palpite.Pontos)
 	})
-	t.Run("Pontuação: Acertar o vencedor e o número de gols da equipe vencedora", func(t *testing.T) {
-		palpite, _ := NewPalpite("p1", "j1")
-		assert.NotNil(t, palpite)
-		assert.Equal(t, 0, palpite.Pontos)
-		palpite.SetGols(5, 3)
-
-		palpite.PontuarPalpite(1, 6, 4)
-		assert.Equal(t, PalpiteEntityPontosAcertarVencedorDiferencaGols, palpite.Pontos)
-
-		palpite.PontuarPalpite(2, 6, 4)
-		assert.Equal(t, PalpiteEntityPontosAcertarVencedorDiferencaGols*2, palpite.Pontos)
-	})
 
 	t.Run("Pontuação: Acertar o vencedor e a diferença de gols entre equipes", func(t *testing.T) {
 		palpite, _ := NewPalpite("p1", "j1")
