@@ -4,9 +4,13 @@ import (
 	"bolao/pkg/entity"
 	"errors"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 const (
+	JogoEntityMsgErrorIdRequerido       string = "ID do jogo é requerido"
+	JogoEntityMsgErrorIdInvalido        string = "ID do jogo está inválido"
 	JogoEntityMsgErrorRodadaIdRequerida string = "ID da Rodada requerida"
 	JogoEntityMsgErrorTimeARequerido    string = "Time A requerido"
 	JogoEntityMsgErrorTimeBRequerido    string = "Time B requerido"
@@ -51,6 +55,12 @@ func NewJogo(rodadaId, timeAId, timeBId string, dia time.Time, local string) (*J
 }
 
 func (j *JogoEntity) Validate() error {
+	if j.ID.String() == "" || j.ID.String() == uuid.Nil.String() {
+		return errors.New(JogoEntityMsgErrorIdRequerido)
+	}
+	if _, err := entity.ParseID(j.ID.String()); err != nil {
+		return errors.New(JogoEntityMsgErrorIdInvalido)
+	}
 	if len(j.RodadaID) <= 0 {
 		return errors.New(JogoEntityMsgErrorRodadaIdRequerida)
 	}

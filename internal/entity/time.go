@@ -4,9 +4,15 @@ import (
 	"bolao/pkg/entity"
 	"errors"
 	"time"
+
+	"github.com/google/uuid"
 )
 
-const TimeEntityMsgErrorNomeTimeRequerido string = "Nome do time não definido"
+const (
+	TimeEntityMsgErrorIdRequerido       string = "ID do time é requerido"
+	TimeEntityMsgErrorIdInvalido        string = "ID do time está inválido"
+	TimeEntityMsgErrorNomeTimeRequerido string = "Nome do time não definido"
+)
 
 type TimeEntity struct {
 	ID       entity.ID `json:"id"`
@@ -35,8 +41,14 @@ func NewTime(nome, escudo string) (*TimeEntity, error) {
 	return time, nil
 }
 
-func (r *TimeEntity) Validate() error {
-	if len(r.Nome) <= 0 {
+func (t *TimeEntity) Validate() error {
+	if t.ID.String() == "" || t.ID.String() == uuid.Nil.String() {
+		return errors.New(TimeEntityMsgErrorIdRequerido)
+	}
+	if _, err := entity.ParseID(t.ID.String()); err != nil {
+		return errors.New(TimeEntityMsgErrorIdInvalido)
+	}
+	if len(t.Nome) <= 0 {
 		return errors.New(TimeEntityMsgErrorNomeTimeRequerido)
 	}
 	return nil

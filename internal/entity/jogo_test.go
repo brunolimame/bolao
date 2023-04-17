@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -23,6 +24,27 @@ func TestJogo(t *testing.T) {
 		assert.NotEmpty(t, jogo.Criado)
 		assert.Empty(t, jogo.Alterado)
 		assert.Equal(t, true, jogo.Status)
+	})
+
+	t.Run("Testando ID", func(t *testing.T) {
+		jogo := &JogoEntity{
+			ID:       uuid.UUID{},
+			RodadaID: "r1",
+			TimeAID:  "ta1",
+			GolsA:    0,
+			TimeBID:  "ta2",
+			GolsB:    0,
+			Dia:      time.Time{},
+			Local:    "local",
+			Criado:   time.Time{},
+			Alterado: time.Time{},
+			Status:   true,
+		}
+
+		assert.Empty(t, jogo.ID)
+		err := jogo.Validate()
+		assert.NotNil(t, err)
+		assert.EqualError(t, err, JogoEntityMsgErrorIdRequerido)
 	})
 
 	t.Run("Alterando status", func(t *testing.T) {

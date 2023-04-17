@@ -7,10 +7,13 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
 const (
+	UserEntityMsgErrorIdRequerido       string = "ID do usuário é requerido"
+	UserEntityMsgErrorIdInvalido        string = "ID do usuário está inválido"
 	userEntityDefaultCostPassword       int    = bcrypt.DefaultCost
 	UserEntityMsgErrorNomeRequerido     string = "Nome do usuário não definido"
 	UserEntityMsgErrorEmailRequerido    string = "E-mail não definido"
@@ -63,6 +66,12 @@ func NewUser(nome, email, password string) (*UserEntity, error) {
 }
 
 func (u *UserEntity) Validate() error {
+	if u.ID.String() == "" || u.ID.String() == uuid.Nil.String() {
+		return errors.New(UserEntityMsgErrorIdRequerido)
+	}
+	if _, err := entity.ParseID(u.ID.String()); err != nil {
+		return errors.New(UserEntityMsgErrorIdInvalido)
+	}
 	if len(u.Nome) <= 0 {
 		return errors.New(UserEntityMsgErrorNomeRequerido)
 	}

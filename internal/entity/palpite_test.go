@@ -2,7 +2,9 @@ package entity
 
 import (
 	"testing"
+	"time"
 
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -23,6 +25,25 @@ func TestPalpite(t *testing.T) {
 		assert.NotEmpty(t, palpite.Criado)
 		assert.Empty(t, palpite.Alterado)
 		assert.Equal(t, true, palpite.Status)
+	})
+
+	t.Run("Testando ID", func(t *testing.T) {
+		palpite := &PalpiteEntity{
+			ID:       uuid.UUID{},
+			PlayerID: "p1",
+			JogoID:   "p2",
+			GolsA:    0,
+			GolsB:    0,
+			Pontos:   0,
+			Criado:   time.Time{},
+			Alterado: time.Time{},
+			Status:   true,
+		}
+
+		assert.Empty(t, palpite.ID)
+		err := palpite.Validate()
+		assert.NotNil(t, err)
+		assert.EqualError(t, err, PalpiteEntityMsgErrorIdRequerido)
 	})
 
 	t.Run("Alterando status", func(t *testing.T) {

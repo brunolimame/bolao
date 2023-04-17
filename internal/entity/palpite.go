@@ -5,9 +5,13 @@ import (
 	"errors"
 	"math"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 const (
+	PalpiteEntityMsgErrorIdRequerido                string = "ID do palpite é requerido"
+	PalpiteEntityMsgErrorIdInvalido                 string = "ID do palpite está inválido"
 	PalpiteEntityMsgErrorIdJogoRequerido            string = "ID do jogo é requerido"
 	PalpiteEntityMsgErrorPlayerRequerido            string = "ID do Player é requerido"
 	PalpiteEntityPontosAcertarPlacarExato           int    = 25
@@ -53,6 +57,12 @@ func NewPalpite(playerId, jogoId string) (*PalpiteEntity, error) {
 }
 
 func (p *PalpiteEntity) Validate() error {
+	if p.ID.String() == "" || p.ID.String() == uuid.Nil.String() {
+		return errors.New(PalpiteEntityMsgErrorIdRequerido)
+	}
+	if _, err := entity.ParseID(p.ID.String()); err != nil {
+		return errors.New(PalpiteEntityMsgErrorIdInvalido)
+	}
 	if len(p.JogoID) <= 0 {
 		return errors.New(PalpiteEntityMsgErrorIdJogoRequerido)
 	}

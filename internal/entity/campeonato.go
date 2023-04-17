@@ -4,9 +4,13 @@ import (
 	"bolao/pkg/entity"
 	"errors"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 const (
+	CampeonatoEntityMsgErrorIdRequerido                   string = "ID do campeonato é requerido"
+	CampeonatoEntityMsgErrorIdInvalido                    string = "ID do campeonato está inválido"
 	CampeonatoEntityMsgErrorNomeRequerido                 string = "Nome do campeonato não definido"
 	CampeonatoEntityMsgErrorRodadaNaoPercenteAoCampeonato string = "A rodada não pertence a este campeonato"
 )
@@ -39,6 +43,12 @@ func NewCampeonato(nome string) (*CampeonatoEntity, error) {
 }
 
 func (c *CampeonatoEntity) Validate() error {
+	if c.ID.String() == "" || c.ID.String() == uuid.Nil.String() {
+		return errors.New(CampeonatoEntityMsgErrorIdRequerido)
+	}
+	if _, err := entity.ParseID(c.ID.String()); err != nil {
+		return errors.New(CampeonatoEntityMsgErrorIdInvalido)
+	}
 	if len(c.Nome) <= 0 {
 		return errors.New(CampeonatoEntityMsgErrorNomeRequerido)
 	}

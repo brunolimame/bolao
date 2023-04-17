@@ -2,7 +2,9 @@ package entity
 
 import (
 	"testing"
+	"time"
 
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -23,6 +25,24 @@ func TestUser(t *testing.T) {
 		assert.NotEmpty(t, user.Criado)
 		assert.Empty(t, user.Alterado)
 		assert.Equal(t, true, user.Status)
+	})
+
+	t.Run("Testando ID", func(t *testing.T) {
+		user := &UserEntity{
+			ID:       uuid.UUID{},
+			Nome:     "usuário",
+			Email:    "email@email.com",
+			Password: "password",
+			Salt:     "salt",
+			Criado:   time.Time{},
+			Alterado: time.Time{},
+			Status:   true,
+		}
+
+		assert.Empty(t, user.ID)
+		err := user.Validate()
+		assert.NotNil(t, err)
+		assert.EqualError(t, err, UserEntityMsgErrorIdRequerido)
 	})
 
 	t.Run("Alterando status", func(t *testing.T) {

@@ -4,9 +4,13 @@ import (
 	"bolao/pkg/entity"
 	"errors"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 const (
+	RodadaEntityMsgErrorIdRequerido            string = "ID da rodada é requerido"
+	RodadaEntityMsgErrorIdInvalido             string = "ID da rodada está inválido"
 	RodadaEntityPesoMinimoRodada               int    = 10
 	RodadaEntitypesoIncrementadoNaRodada       int    = 1
 	RodadaEntityMsgErrorNomeRodadaRequerido    string = "Nome da rodada não definido"
@@ -47,6 +51,12 @@ func NewRodada(campeaontoId, nome string, peso int) (*RodadaEntity, error) {
 }
 
 func (r *RodadaEntity) Validate() error {
+	if r.ID.String() == "" || r.ID.String() == uuid.Nil.String() {
+		return errors.New(RodadaEntityMsgErrorIdRequerido)
+	}
+	if _, err := entity.ParseID(r.ID.String()); err != nil {
+		return errors.New(RodadaEntityMsgErrorIdInvalido)
+	}
 	if len(r.CampeonatoID) <= 0 {
 		return errors.New(RodadaEntityMsgErrorCampeonatoIdRequerido)
 	}
