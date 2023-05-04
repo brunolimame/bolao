@@ -14,6 +14,8 @@ const (
 	PalpiteEntityMsgErrorIdInvalido                 string = "ID do palpite está inválido"
 	PalpiteEntityMsgErrorIdJogoRequerido            string = "ID do jogo é requerido"
 	PalpiteEntityMsgErrorPlayerRequerido            string = "ID do Player é requerido"
+	PalpiteEntityMsgErrorNumeroGolsPalpiteNegativo  string = "O número gols do palpite deve ser maior ou igual a 0"
+	PalpiteEntityMsgErrorNumeroGolsJogoNegativo     string = "O número gols do time deve ser maior ou igual a 0"
 	PalpiteEntityPontosAcertarPlacarExato           int    = 25
 	PalpiteEntityPontosAcertarVencedorGolsVencedor  int    = 20
 	PalpiteEntityPontosAcertarVencedorDiferencaGols int    = 15
@@ -72,9 +74,13 @@ func (p *PalpiteEntity) Validate() error {
 	return nil
 }
 
-func (p *PalpiteEntity) SetGols(golsTimeA, golsTimeB int) {
+func (p *PalpiteEntity) SetGols(golsTimeA, golsTimeB int) error {
+	if golsTimeA < 0 || golsTimeB < 0 {
+		return errors.New(PalpiteEntityMsgErrorNumeroGolsPalpiteNegativo)
+	}
 	p.GolsA = golsTimeA
 	p.GolsB = golsTimeB
+	return nil
 }
 
 func (p *PalpiteEntity) SetPontos(pontos int) {
@@ -89,11 +95,15 @@ func (p *PalpiteEntity) Disable() {
 	p.Status = false
 }
 
-func (p *PalpiteEntity) PontuarPalpite(PesoRodada, JogoTimeA, JogoTimeB int) {
+func (p *PalpiteEntity) PontuarPalpite(PesoRodada, JogoTimeA, JogoTimeB int) error {
 
 	pontuacao := 0
 	palpiteTimeA := p.GolsA
 	palpiteTimeB := p.GolsB
+	if JogoTimeA < 0 || JogoTimeB < 0 {
+		return errors.New(PalpiteEntityMsgErrorNumeroGolsJogoNegativo)
+	}
+
 	diferencaGols := int(math.Abs(float64(JogoTimeA-JogoTimeB))) - int(math.Abs(float64(palpiteTimeA-palpiteTimeB)))
 
 	if palpiteTimeA == JogoTimeA && palpiteTimeB == JogoTimeB { // Acertar o placar exato da partida, 25 pontos
@@ -119,4 +129,6 @@ func (p *PalpiteEntity) PontuarPalpite(PesoRodada, JogoTimeA, JogoTimeB int) {
 	}
 
 	p.Pontos = pontuacao
+
+	return nil
 }

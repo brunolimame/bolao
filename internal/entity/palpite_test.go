@@ -95,11 +95,34 @@ func TestPalpite(t *testing.T) {
 		assert.EqualError(t, err, PalpiteEntityMsgErrorIdJogoRequerido)
 	})
 
+	t.Run("Pontuação: Testar Placar negativo", func(t *testing.T) {
+		palpite, _ := NewPalpite("p1", "j1")
+		assert.NotNil(t, palpite)
+		assert.Equal(t, 0, palpite.Pontos)
+		err := palpite.SetGols(-1, 2)
+		assert.NotNil(t, err)
+		assert.EqualError(t, err, PalpiteEntityMsgErrorNumeroGolsPalpiteNegativo)
+
+		err = palpite.SetGols(0, -2)
+		assert.NotNil(t, err)
+		assert.EqualError(t, err, PalpiteEntityMsgErrorNumeroGolsPalpiteNegativo)
+
+		palpite.SetGols(1, 0)
+		err = palpite.PontuarPalpite(1, -1, 2)
+		assert.NotNil(t, err)
+		assert.EqualError(t, err, PalpiteEntityMsgErrorNumeroGolsJogoNegativo)
+
+		err = palpite.PontuarPalpite(1, 0, -1)
+		assert.NotNil(t, err)
+		assert.EqualError(t, err, PalpiteEntityMsgErrorNumeroGolsJogoNegativo)
+	})
+
 	t.Run("Pontuação: Acertar o placar exato da partida", func(t *testing.T) {
 		palpite, _ := NewPalpite("p1", "j1")
 		assert.NotNil(t, palpite)
 		assert.Equal(t, 0, palpite.Pontos)
-		palpite.SetGols(5, 2)
+		err := palpite.SetGols(5, 2)
+		assert.Nil(t, err)
 
 		palpite.PontuarPalpite(1, 5, 2)
 		assert.Equal(t, PalpiteEntityPontosAcertarPlacarExato, palpite.Pontos)
@@ -197,8 +220,8 @@ func TestPalpite(t *testing.T) {
 
 func BenchmarkPontuarPalpite(b *testing.B) {
 	palpite, _ := NewPalpite("p1", "j1")
-	palpite.SetGols(2, 0)
+	_ = palpite.SetGols(2, 0)
 	for i := 0; i < b.N; i++ {
-		palpite.PontuarPalpite(1, 0, 5)
+		_ = palpite.PontuarPalpite(1, 0, 5)
 	}
 }
