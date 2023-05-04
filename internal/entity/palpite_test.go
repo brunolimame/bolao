@@ -194,3 +194,11 @@ func TestPalpite(t *testing.T) {
 	})
 
 }
+
+func BenchmarkPontuarPalpite(b *testing.B) {
+	palpite, _ := NewPalpite("p1", "j1")
+	palpite.SetGols(2, 0)
+	for i := 0; i < b.N; i++ {
+		palpite.PontuarPalpite(1, 0, 5)
+	}
+}
